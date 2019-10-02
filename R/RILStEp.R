@@ -28,7 +28,7 @@ extract_peak_qtls <-
     )
 
     pdf(paste(output, "_QTL_manhattan_plot.pdf", sep = ""))
-    manhattan.plot(gwaspoly_threshold, trait = "color", model = "additive")
+    manhattan.plot(gwaspoly_threshold, trait = phenotype_name, model = "additive")
     dev.off()
 
     qtls <- get.QTL(
