@@ -60,3 +60,27 @@ regions = c("chr03_1234:chr10_5678")                         # chr03_1234 ~ chr1
 regions = c("chr03_1234", "chr10_5678")                      # chr03_1234 x chr10_5678
 regions = c("chr03_1234:chr10_5678", "chr04_9012:chr7_3456") # chr03_1234~chr10_5678 x chr04_9012~chr7_3456
 ```
+
+## Input data format
+input files should be csv format.<br>
+
+phenotype data
+
+| Name | trait1 |
+----|----
+| Sample1 | 12.3 |
+| Sample2 | 23.4 |
+| ... | ... |
+| SampleXX | 78.9 |
+
+genotype data
+
+| Marker | Chrom | Position | Sample1 | Sample2 | ... | SampleXX |
+----|----|----|----|----|----|----
+| 1 | chr01 | 1234 | 2 | 2 | ... | 2 |
+| 2 | chr01 | 3456 | 2 | 0 | ... | 0 |
+| 3 | chr01 | 9999 | 0 | 0 | ... | 1 |
+| ... | ... | ... | ... | ... | ... |
+| XXX | chr12 | 4869786 | 0 | 0 | ... | 2 |
+
+marker coded as {0,1,2} = {aa,Aa,AA}
