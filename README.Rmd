@@ -91,4 +91,5 @@ genotype data
 | XXX | chr12 | 4869786 | 0 | 0 | ... | 2 |
 
 marker coded as {0,1,2} = {AA,AB,BB}<br>
-A, B: each parental genotype
+A, B: each parental genotype<br>
+!! Only bi-allelic markers are allowed !!
