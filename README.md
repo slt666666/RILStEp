@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# RILStEp
+# RILStEp <img src='man/figures/RILStEp.png' align="right" height="200" />
 
 <!-- badges: start -->
 
@@ -11,6 +11,14 @@ RILStEp(Recombinant Inbred Lines Stepwise Epistasis analysis) package is
 the epistasis analysis tool. This package enables to detect the
 epistatic relationships between SNPs for RIL population by comparison of
 2 models based on bayes factor.<br> publication: Not yet
+
+## Requirements
+
+Other than CRAN package, `GWASpoly` package is required for RILStEp
+package.<br> please download zip files from
+[here](https://potatobreeding.cals.wisc.edu/software/) <br> and install
+`install.packages("GWASpoly_download/GWASpoly_1.3.tar.gz", repos = NULL,
+type = "source")`
 
 ## Installation
 
