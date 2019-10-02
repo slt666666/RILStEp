@@ -1,6 +1,3 @@
-# stop devtools::check() note about elements in furrr packages
-utils::globalVariables(c("multiprocess"))
-
 #' extracts QTL-like SNPs based on GWASpoly package
 #' @importFrom GWASpoly GWASpoly set.threshold manhattan.plot get.QTL set.K
 #' @importFrom grDevices dev.off pdf
@@ -216,6 +213,7 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
 #' @importFrom future availableCores plan
 #' @importFrom data.table transpose
 #' @importFrom furrr future_map
+#' @importFrom future multiprocess
 #' @importFrom utils combn write.csv
 #' @param loaded_data phenotype and genotype dataset from load_data
 #' @param output prefix of output files
