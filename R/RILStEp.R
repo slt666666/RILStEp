@@ -186,6 +186,7 @@ draw_heatmap <- function(result, filename) {
 }
 
 #' load dataset to use GWAS and RILStEp
+#' @export
 #' @importFrom utils read.csv
 #' @importFrom GWASpoly read.GWASpoly
 #' @param phenotype_path path to csv file of phenotype data
