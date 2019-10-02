@@ -193,6 +193,8 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
   ### loading phenotype & genotype data
   phenotype_data <-
     read.csv(phenotype_path, sep = ",", header = TRUE, row.names = 1)
+  phenotype_data <-
+    phenotype_data[, phenotype_name, drop = FALSE]
   genotype_data <-
     read.csv(genotype_path, sep = ",", header = TRUE)
   gwas_data <- read.GWASpoly(
