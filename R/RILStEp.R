@@ -152,9 +152,15 @@ check_epistasis <-
 #' @importFrom grDevices dev.off pdf
 #' @param result bayesfactor of all combination of SNPs
 #' @param filename name of save file
-draw_heatmap <- function(result, filename) {
+#' @param marker_data indices of all SNP positions
+draw_heatmap <- function(result, filename, marker_data) {
   result$score <- log10(result$score)
   result_for_heatmap <- xtabs(score ~ first + second, result)
+  rownames(result_for_heatmap) <-
+    sapply(rownames(result_for_heatmap), marker2pos, marker_data = marker_data)
+  colnames(result_for_heatmap) <-
+    sapply(colnames(result_for_heatmap), marker2pos, marker_data = marker_data)
+
   if (dim(result_for_heatmap)[1] > 24) {
     row_number <- dim(result_for_heatmap)[1]
     lab_row <- rep("", row_number)
@@ -304,19 +310,24 @@ rilstep <-
     )
     result <- data.frame(matrix(unlist(result), nrow = length(result), byrow = T))
     colnames(result) <- c("first", "second", "score")
+
+    # draw heatmap
+    heatmap_name <- paste(output, "_heatmap.pdf", sep = "")
+    if (no_region) {
+      draw_heatmap(result, heatmap_name, marker_data)
+    } else {
+      if ((length(region1_markers) > 1) && (length(region2_markers) > 1)) {
+        draw_heatmap(result, heatmap_name, marker_data)
+      }
+    }
+
+    # add marker position
     result$first <-
       sapply(result$first, marker2pos, marker_data = marker_data)
     result$second <-
       sapply(result$second, marker2pos, marker_data = marker_data)
     write.csv(result, file = paste(output, "_epistasis_BFscore.csv", sep = ""))
 
-    if (no_region) {
-      draw_heatmap(result, paste(output, "_heatmap.pdf", sep = ""))
-    } else {
-      if ((length(region1_markers) > 1) && (length(region2_markers) > 1)) {
-        draw_heatmap(result, paste(output, "_heatmap.pdf", sep = ""))
-      }
-    }
     print(proc.time() - t)
     return(result[order(-result$score), ])
   }
