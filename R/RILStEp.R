@@ -23,7 +23,7 @@ extract_peak_qtls <-
 
     gwaspoly_threshold <- set.threshold(
       gwaspoly_result,
-      method = "Bonferroni",
+      method = "FDR",
       level = 0.05
     )
 
