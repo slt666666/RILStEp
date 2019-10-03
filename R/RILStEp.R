@@ -4,11 +4,13 @@
 #' @importFrom utils write.csv
 #' @param data_for_gwas phenotype and genotype data for GWASpoly from load_data
 #' @param phenotype_name trait's name
+#' @param qtl_threshold threshold method to select QTLs, "Bonferroni" or "FDR" or "permute"
 #' @param output prefix of output files
 #' @param core_num the number of CPU cores to use
 extract_peak_qtls <-
   function(data_for_gwas,
            phenotype_name,
+           qtl_threshold,
            output,
            core_num) {
 
@@ -23,7 +25,7 @@ extract_peak_qtls <-
 
     gwaspoly_threshold <- set.threshold(
       gwaspoly_result,
-      method = "FDR",
+      method = qtl_threshold,
       level = 0.05
     )
 
@@ -224,13 +226,15 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
 #' @importFrom utils combn write.csv
 #' @param loaded_data phenotype and genotype dataset from load_data
 #' @param output prefix of output files
-#' @param interval select 1 SNP in interval number
+#' @param qtl_threshold threshold method to select QTLs, "Bonferroni" or "FDR" or "permute"
+#' @param interval select 1 SNP in this interval number
 #' @param region specify SNP regions for detecting epistasis
 #' @param qtls specify QTL-like SNPs
 #' @param core_num specify the number of CPU core to use
 rilstep <-
   function(loaded_data,
            output,
+           qtl_threshold = "Bonferroni",
            interval = 1,
            region = NA,
            qtls = NA,
@@ -251,7 +255,7 @@ rilstep <-
 
     ### extract QTL candidate SNPs
     if (is.na(qtls[1])) {
-      peak_qtls <- extract_peak_qtls(loaded_data$for_gwas, phenotype_name, output, core_num)
+      peak_qtls <- extract_peak_qtls(loaded_data$for_gwas, phenotype_name, qtl_threshold, output, core_num)
     }else{
       peak_qtls <- sapply(qtls, pos2marker, marker_data = marker_data)
     }
