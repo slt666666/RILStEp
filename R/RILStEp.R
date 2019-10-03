@@ -153,6 +153,7 @@ check_epistasis <-
 #' @param result bayesfactor of all combination of SNPs
 #' @param filename name of save file
 draw_heatmap <- function(result, filename) {
+  result$score <- log10(result$score)
   result_for_heatmap <- xtabs(score ~ first + second, result)
   if (dim(result_for_heatmap)[1] > 24) {
     row_number <- dim(result_for_heatmap)[1]
