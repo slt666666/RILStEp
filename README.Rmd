@@ -55,17 +55,17 @@ result2 <- rilstep(loaded_data, "result2", interval = 500)
 result3 <- rilstep(loaded_data, "result3", qtls = c("chr08_19928351", "chr09_3909046"))
 
 ### using SNPs in specific regions
-result4 <- rilstep(loaded_data, "result4", regions = c("chr03_2132221:chr10_9330401", "chr03_2132221:chr10_9330401"))
+result4 <- rilstep(loaded_data, "result4", region = c("chr03_2132221:chr10_9330401", "chr03_2132221:chr10_9330401"))
 
 ### example
-result5 <- rilstep(loaded_data, "result5", interval = 500, regions = c("chr03_2132221:chr10_9330401", "chr03_2132221:chr10_9330401"), core_num = 8)
+result5 <- rilstep(loaded_data, "result5", interval = 500, region = c("chr03_2132221:chr10_9330401", "chr03_2132221:chr10_9330401"), core_num = 8)
 ```
 option `region=c()` can specify regions. rilstep check all combinations of SNPs in specified regions.
 ```
-regions = c("chr03_1234")                                    # chr03_1234 x all SNPs
-regions = c("chr03_1234:chr10_5678")                         # chr03_1234 ~ chr10_5678 x all SNPs
-regions = c("chr03_1234", "chr10_5678")                      # chr03_1234 x chr10_5678
-regions = c("chr03_1234:chr10_5678", "chr04_9012:chr7_3456") # chr03_1234~chr10_5678 x chr04_9012~chr7_3456
+region = c("chr03_1234")                                    # chr03_1234 x all SNPs
+region = c("chr03_1234:chr10_5678")                         # chr03_1234 ~ chr10_5678 x all SNPs
+region = c("chr03_1234", "chr10_5678")                      # chr03_1234 x chr10_5678
+region = c("chr03_1234:chr10_5678", "chr04_9012:chr7_3456") # chr03_1234~chr10_5678 x chr04_9012~chr7_3456
 ```
 
 ## Input data format
