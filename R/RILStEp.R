@@ -4,13 +4,15 @@
 #' @importFrom utils write.csv
 #' @param data_for_gwas phenotype and genotype data for GWASpoly from load_data
 #' @param phenotype_name trait's name
-#' @param qtl_threshold threshold method to select QTLs, "Bonferroni" or "FDR" or "permute"
+#' @param qtl_threshold_model threshold method to select QTLs, "p_value" or "Bonferroni" or "FDR" or "permute"
+#' @param qtl_threshold_value threshold value to select QTLs depends on qtl_threshold_model (p-value or q-value)
 #' @param output prefix of output files
 #' @param core_num the number of CPU cores to use
 extract_peak_qtls <-
   function(data_for_gwas,
            phenotype_name,
-           qtl_threshold,
+           qtl_threshold_model,
+           qtl_threshold_value,
            output,
            core_num) {
 
@@ -23,20 +25,29 @@ extract_peak_qtls <-
       quiet = F
     )
 
-    gwaspoly_threshold <- set.threshold(
-      gwaspoly_result,
-      method = qtl_threshold,
-      level = 0.05
-    )
-
+    if (qtl_threshold_model == "p_value") {
+      scores <- 10 ** (-gwaspoly_result@scores[[phenotype_name]])
+      qtl_ind <- scores < qtl_threshold_value
+      Trait <- rep(phenotype_name, sum(qtl_ind))
+      Model <- rep(qtl_threshold_model, sum(qtl_ind))
+      Threshold <- rep(qtl_threshold_value, sum(qtl_ind))
+      Scores <- scores[qtl_ind, ]
+      Map <- gwaspoly_result@map[qtl_ind, ]
+      qtls <- cbind(Trait, Model, Threshold, Map, Scores)
+    } else {
+      gwaspoly_threshold <- set.threshold(
+        gwaspoly_result,
+        method = qtl_threshold_model,
+        level = qtl_threshold_value
+      )
+      qtls <- get.QTL(
+        gwaspoly_threshold,
+        traits = phenotype_name,
+      )
+    }
     pdf(paste(output, "_QTL_manhattan_plot.pdf", sep = ""))
     manhattan.plot(gwaspoly_threshold, trait = phenotype_name, model = "additive")
     dev.off()
-
-    qtls <- get.QTL(
-      gwaspoly_threshold,
-      traits = phenotype_name,
-    )
 
     write.csv(qtls, file = paste(output, "_QTL_score.csv", sep = ""))
 
@@ -226,7 +237,8 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
 #' @importFrom utils combn write.csv
 #' @param loaded_data phenotype and genotype dataset from load_data
 #' @param output prefix of output files
-#' @param qtl_threshold threshold method to select QTLs, "Bonferroni" or "FDR" or "permute"
+#' @param qtl_threshold_model threshold method to select QTLs, "p_value" or "Bonferroni" or "FDR" or "permute"
+#' @param qtl_threshold_value threshold value to select QTLs depends on qtl_threshold_model (p-value or q-value)
 #' @param interval select 1 SNP in this interval number
 #' @param region specify SNP regions for detecting epistasis
 #' @param qtls specify QTL-like SNPs
@@ -234,7 +246,8 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
 rilstep <-
   function(loaded_data,
            output,
-           qtl_threshold = "Bonferroni",
+           qtl_threshold_model = "Bonferroni",
+           qtl_threshold_value = 0.05,
            interval = 1,
            region = NA,
            qtls = NA,
@@ -255,7 +268,7 @@ rilstep <-
 
     ### extract QTL candidate SNPs
     if (is.na(qtls[1])) {
-      peak_qtls <- extract_peak_qtls(loaded_data$for_gwas, phenotype_name, qtl_threshold, output, core_num)
+      peak_qtls <- extract_peak_qtls(loaded_data$for_gwas, phenotype_name, qtl_threshold_model, qtl_threshold_value, output, core_num)
     }else{
       peak_qtls <- sapply(qtls, pos2marker, marker_data = marker_data)
     }

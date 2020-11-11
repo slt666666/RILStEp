@@ -4,8 +4,13 @@
 \alias{check_epistasis}
 \title{Calculate BayesFactor for Comparison between Model1 (without Epistasis) vs Model2 (with Epistasis)}
 \usage{
-check_epistasis(pair_index, genotype_phenotype_dataset, phenotype_name,
-  peak_qtls, pairs)
+check_epistasis(
+  pair_index,
+  genotype_phenotype_dataset,
+  phenotype_name,
+  peak_qtls,
+  pairs
+)
 }
 \arguments{
 \item{pair_index}{indices of SNP pair to check epistasis}

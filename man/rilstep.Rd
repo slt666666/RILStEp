@@ -4,15 +4,25 @@
 \alias{rilstep}
 \title{detect epistasis candidates based on bayes factor}
 \usage{
-rilstep(loaded_data, output, qtl_threshold = "Bonferroni",
-  interval = 1, region = NA, qtls = NA, core_num = NA)
+rilstep(
+  loaded_data,
+  output,
+  qtl_threshold_model = "Bonferroni",
+  qtl_threshold_value = 0.05,
+  interval = 1,
+  region = NA,
+  qtls = NA,
+  core_num = NA
+)
 }
 \arguments{
 \item{loaded_data}{phenotype and genotype dataset from load_data}
 
 \item{output}{prefix of output files}
 
-\item{qtl_threshold}{threshold method to select QTLs, "Bonferroni" or "FDR" or "permute"}
+\item{qtl_threshold_model}{threshold method to select QTLs, "p_value" or "Bonferroni" or "FDR" or "permute"}
+
+\item{qtl_threshold_value}{threshold value to select QTLs depends on qtl_threshold_model (p-value or q-value)}
 
 \item{interval}{select 1 SNP in this interval number}
 
