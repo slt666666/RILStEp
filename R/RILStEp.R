@@ -28,12 +28,16 @@ extract_peak_qtls <-
     if (qtl_threshold_model == "p_value") {
       scores <- 10 ** (-gwaspoly_result@scores[[phenotype_name]])
       qtl_ind <- scores < qtl_threshold_value
-      Trait <- rep(phenotype_name, sum(qtl_ind))
-      Model <- rep(qtl_threshold_model, sum(qtl_ind))
-      Threshold <- rep(qtl_threshold_value, sum(qtl_ind))
-      Scores <- scores[qtl_ind, ]
-      Map <- gwaspoly_result@map[qtl_ind, ]
-      qtls <- cbind(Trait, Model, Threshold, Map, Scores)
+      if (sum(qtl_ind) > 0) {
+        Trait <- rep(phenotype_name, sum(qtl_ind))
+        Model <- rep(qtl_threshold_model, sum(qtl_ind))
+        Threshold <- rep(qtl_threshold_value, sum(qtl_ind))
+        Scores <- scores[qtl_ind, ]
+        Map <- gwaspoly_result@map[qtl_ind, ]
+        qtls <- cbind(Trait, Model, Threshold, Map, Scores)
+      } else {
+        qtls <- data.frame()
+      }
     } else {
       gwaspoly_threshold <- set.threshold(
         gwaspoly_result,
