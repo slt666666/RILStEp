@@ -7,7 +7,7 @@
 rilstep(
   loaded_data,
   output,
-  qtl_threshold_model = "Bonferroni",
+  qtl_threshold_model = "FDR",
   qtl_threshold_value = 0.05,
   interval = 1,
   region = NA,
