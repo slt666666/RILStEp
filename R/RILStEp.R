@@ -38,6 +38,11 @@ extract_peak_qtls <-
       } else {
         qtls <- data.frame()
       }
+      gwaspoly_threshold <- set.threshold(
+        gwaspoly_result,
+        method = "FDR",
+        level = 0.05
+      )
     } else {
       gwaspoly_threshold <- set.threshold(
         gwaspoly_result,
@@ -250,7 +255,7 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
 rilstep <-
   function(loaded_data,
            output,
-           qtl_threshold_model = "Bonferroni",
+           qtl_threshold_model = "FDR",
            qtl_threshold_value = 0.05,
            interval = 1,
            region = NA,
