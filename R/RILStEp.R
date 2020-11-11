@@ -27,8 +27,7 @@ extract_peak_qtls <-
 
     if (qtl_threshold_model == "p_value") {
       scores <- 10 ** (-gwaspoly_result@scores[[phenotype_name]])
-      qtl_ind <- scores < qtl_threshold_value
-      print(sum(qtl_ind))
+      qtl_ind <- (!is.na(scores)) & (scores < qtl_threshold_value)
       if (sum(qtl_ind) > 0) {
         Trait <- rep(phenotype_name, sum(qtl_ind))
         Model <- rep(qtl_threshold_model, sum(qtl_ind))
