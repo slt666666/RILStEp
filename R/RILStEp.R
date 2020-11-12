@@ -32,7 +32,7 @@ extract_peak_qtls <-
         Trait <- rep(phenotype_name, sum(qtl_ind))
         Model <- rep(qtl_threshold_model, sum(qtl_ind))
         Threshold <- rep(qtl_threshold_value, sum(qtl_ind))
-        Scores <- scores[qtl_ind, ]
+        Scores <- gwaspoly_result@scores[[phenotype_name]][qtl_ind, ]
         Map <- gwaspoly_result@map[qtl_ind, ]
         qtls <- cbind(Trait, Model, Threshold, Map, Scores)
       } else {
