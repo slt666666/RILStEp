@@ -75,7 +75,7 @@ extract_peak_qtls <-
         chr <- qtls[i, 5]
         score <- qtls[i, 9]
 
-        other_peak <- (marker - before_marker) > 100
+        other_peak <- (marker - before_marker) > 500
         other_chr <- chr != before_chr
         last_qtl <- i == dim(qtls)[1]
         if (other_peak || other_chr || last_qtl) {
