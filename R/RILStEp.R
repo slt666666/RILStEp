@@ -348,10 +348,12 @@ rilstep <-
     }
 
     # add marker position
+    print(proc.time() - t)
     result$first <-
       sapply(result$first, marker2pos, marker_data = marker_data)
     result$second <-
       sapply(result$second, marker2pos, marker_data = marker_data)
+    print(proc.time() - t)
     write.csv(result, file = paste(output, "_epistasis_BFscore.csv", sep = ""))
 
     print(proc.time() - t)
