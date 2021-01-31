@@ -12,7 +12,8 @@ rilstep(
   interval = 1,
   region = NA,
   qtls = NA,
-  core_num = NA
+  core_num = NA,
+  heterozygous = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ rilstep(
 \item{qtls}{specify QTL-like SNPs}
 
 \item{core_num}{specify the number of CPU core to use}
+
+\item{heterozygous}{consider heterozygous(TRUE) or not(FALSE)}
 }
 \description{
 detect epistasis candidates based on bayes factor

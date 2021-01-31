@@ -54,8 +54,11 @@ result3 <- rilstep(loaded_data, "result3", qtls = c("chr08_19928351", "chr09_390
 ### using SNPs in specific regions
 result4 <- rilstep(loaded_data, "result4", region = c("chr03_2132221:chr10_9330401", "chr03_2132221:chr10_9330401"))
 
+### consider heterozygous
+result5 <- rilstep(loaded_data, "result5", heterozygous = TRUE)
+
 ### example
-result5 <- rilstep(loaded_data, "result5", interval = 500, region = c("chr03_2132221:chr10_9330401", "chr03_2132221:chr10_9330401"), core_num = 8)
+result6 <- rilstep(loaded_data, "result6", interval = 500, region = c("chr03_2132221:chr10_9330401", "chr03_2132221:chr10_9330401"), core_num = 8)
 ```
 
 option `region=c()` can specify regions. rilstep check all combinations

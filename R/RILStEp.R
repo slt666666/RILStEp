@@ -169,6 +169,73 @@ check_epistasis <-
     return(list(snp1, snp2, exp(result@bayesFactor$bf)))
   }
 
+#' Calculate BayesFactor for Comparison between Model1 (without Epistasis) vs Model2 (with Epistasis)
+#' @importFrom BayesFactor lmBF
+#' @importFrom stats as.formula na.omit xtabs
+#' @param pair_index indices of SNP pair to check epistasis
+#' @param genotype_phenotype_dataset dataset of genotype and phenotype
+#' @param phenotype_name trait's name
+#' @param peak_qtls QTL-like SNP index list from extract_peak_qtls() or user specify
+#' @param pairs SNP pairs
+check_epistasis2 <-
+  function(pair_index,
+           genotype_phenotype_dataset,
+           phenotype_name,
+           peak_qtls,
+           pairs) {
+
+    snp1 <- pairs[1, pair_index]
+    snp2 <- pairs[2, pair_index]
+    qtl_num <- length(peak_qtls)
+    ### SNPs index + 2 because of row.names & phenotype columns
+    use_columns <- as.character(c(phenotype_name, peak_qtls, snp1, snp2))
+    extract_data <- genotype_phenotype_dataset[, use_columns]
+    extract_data <- na.omit(extract_data)
+
+    h_x <- extract_data[, qtl_num + 2] == 0
+    m_x <- extract_data[, qtl_num + 2] == 1
+    f_x <- extract_data[, qtl_num + 2] == 2
+    x_h <- extract_data[, qtl_num + 3] == 0
+    x_m <- extract_data[, qtl_num + 3] == 1
+    x_f <- extract_data[, qtl_num + 3] == 2
+
+    base <- rep(0, dim(extract_data)[1])
+    base[f_x & x_f] <- 1
+    extract_data <- transform(extract_data, Epi1 = base)
+    base <- rep(0, dim(extract_data)[1])
+    base[f_x & x_m] <- 1
+    extract_data <- transform(extract_data, Epi2 = base)
+    base <- rep(0, dim(extract_data)[1])
+    base[f_x & x_h] <- 1
+    extract_data <- transform(extract_data, Epi3 = base)
+    base <- rep(0, dim(extract_data)[1])
+    base[m_x & x_f] <- 1
+    extract_data <- transform(extract_data, Epi4 = base)
+    base <- rep(0, dim(extract_data)[1])
+    base[m_x & x_m] <- 1
+    extract_data <- transform(extract_data, Epi5 = base)
+    base <- rep(0, dim(extract_data)[1])
+    base[m_x & x_h] <- 1
+    extract_data <- transform(extract_data, Epi6 = base)
+    base <- rep(0, dim(extract_data)[1])
+    base[h_x & x_f] <- 1
+    extract_data <- transform(extract_data, Epi7 = base)
+    base <- rep(0, dim(extract_data)[1])
+    base[h_x & x_m] <- 1
+    extract_data <- transform(extract_data, Epi8 = base)
+
+    # only QTL model
+    exp_val <- paste(colnames(extract_data)[2:(3 + qtl_num)], collapse = " + ")
+    model1_fomula <- as.formula(paste(phenotype_name, exp_val, sep = " ~ "))
+    # with Epistasis model
+    exp_val <- paste(c(colnames(extract_data)[2:(3 + qtl_num)], c("Epi1", "Epi2", "Epi3", "Epi4", "Epi5", "Epi6", "Epi7", "Epi8")), collapse = " + ")
+    model2_fomula <- as.formula(paste(phenotype_name, exp_val, sep = " ~ "))
+    mod1 <- lmBF(model1_fomula, data = extract_data)
+    mod2 <- lmBF(model2_fomula, data = extract_data)
+    result <- mod2 / mod1
+    return(list(snp1, snp2, exp(result@bayesFactor$bf)))
+  }
+
 #' draw heatmap of bayes factor
 #' @importFrom heatmap3 heatmap3
 #' @importFrom grDevices dev.off pdf
@@ -252,6 +319,7 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
 #' @param region specify SNP regions for detecting epistasis
 #' @param qtls specify QTL-like SNPs
 #' @param core_num specify the number of CPU core to use
+#' @param heterozygous consider heterozygous(TRUE) or not(FALSE)
 rilstep <-
   function(loaded_data,
            output,
@@ -260,7 +328,8 @@ rilstep <-
            interval = 1,
            region = NA,
            qtls = NA,
-           core_num = NA) {
+           core_num = NA,
+           heterozygous = FALSE) {
 
     print("start RILStEp !!")
 
@@ -324,16 +393,29 @@ rilstep <-
       merge(phenotype_data, tmp_genotype_data, by = "row.names")
 
     ### calculate bayes factor
-    plan(multiprocess, workers = core_num)
-    t <- proc.time()
-    result <- future_map(
-      1:dim(pairs)[2],
-      check_epistasis,
-      genotype_phenotype_dataset = genotype_phenotype_dataset,
-      phenotype_name = phenotype_name,
-      peak_qtls = peak_qtls,
-      pairs = pairs
-    )
+    if (heterozygous) {
+      plan(multiprocess, workers = core_num)
+      t <- proc.time()
+      result <- future_map(
+        1:dim(pairs)[2],
+        check_epistasis2,
+        genotype_phenotype_dataset = genotype_phenotype_dataset,
+        phenotype_name = phenotype_name,
+        peak_qtls = peak_qtls,
+        pairs = pairs
+      )
+    } else {
+      plan(multiprocess, workers = core_num)
+      t <- proc.time()
+      result <- future_map(
+        1:dim(pairs)[2],
+        check_epistasis,
+        genotype_phenotype_dataset = genotype_phenotype_dataset,
+        phenotype_name = phenotype_name,
+        peak_qtls = peak_qtls,
+        pairs = pairs
+      )
+    }
     result <- data.frame(matrix(unlist(result), nrow = length(result), byrow = T))
     colnames(result) <- c("first", "second", "score")
 
