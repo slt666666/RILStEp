@@ -10,7 +10,8 @@
 RILStEp(Recombinant Inbred Lines Stepwise Epistasis analysis) package is
 the epistasis analysis tool. This package enables to detect the
 epistatic relationships between SNPs for RIL population by comparison of
-2 models based on bayes factor.<br> publication: Not yet
+2 models based on bayes factor.<br> publication:
+<https://doi.org/10.1093/g3journal/jkab130>
 
 ## Requirements
 
