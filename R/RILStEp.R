@@ -347,7 +347,9 @@ rilstep <-
     ### extract QTL candidate SNPs
     if (is.na(qtls[1])) {
       peak_qtls <- extract_peak_qtls(loaded_data$for_gwas, phenotype_name, qtl_threshold_model, qtl_threshold_value, output, core_num)
-    }else{
+    } else if (qtls == FALSE){
+      peak_qtls <- c()
+    } else {
       peak_qtls <- sapply(qtls, pos2marker, marker_data = marker_data)
     }
 
