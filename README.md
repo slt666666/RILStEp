@@ -23,6 +23,8 @@ type = "source")`<br> or
 `install.packages("GWASpoly_download/GWASpoly_1.3.zip", repos = NULL,
 type = "source")`
 
+R version: 3.6
+
 ## Installation
 
 You can install RILStEp from
