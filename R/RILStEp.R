@@ -25,7 +25,7 @@ extract_peak_qtls <-
       models = c("additive"),
       traits = c(phenotype_name),
       params = params,
-      n.core = core_num
+      n.core = 1
     )
 
     if (qtl_threshold_model == "p_value") {
