@@ -16,9 +16,11 @@ extract_peak_qtls <-
            output,
            core_num) {
 
+    data.loco <- set.K(data_for_gwas, LOCO=TRUE, n.core=core_num)
+
     gwaspoly_result <- GWASpoly(
-      set.K(data_for_gwas, LOCO=TRUE, n.core=core_num),
-      "additive",
+      data = data.loco,
+      models = c("additive"),
       traits = phenotype_name,
       params = NULL,
       n.core = core_num,
