@@ -18,7 +18,7 @@ extract_peak_qtls <-
 
     data.loco <- set.K(data_for_gwas, LOCO=TRUE, n.core=2)
     
-    params <- set.params(geno.freq = 1 - 5/N)
+    params <- set.params()
 
     gwaspoly_result <- GWASpoly(
       data = data.loco,
