@@ -16,7 +16,7 @@ extract_peak_qtls <-
            output,
            core_num) {
 
-    data.loco <- set.K(data_for_gwas, LOCO=TRUE, n.core=1)
+    data.loco <- set.K(data_for_gwas, LOCO=TRUE, n.core=core_num)
 
     gwaspoly_result <- GWASpoly(
       data = data.loco,
