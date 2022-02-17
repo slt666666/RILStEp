@@ -17,14 +17,15 @@ extract_peak_qtls <-
            core_num) {
 
     data.loco <- set.K(data_for_gwas, LOCO=TRUE, n.core=2)
+    
+    params <- set.params(geno.freq = 1 - 5/N)
 
     gwaspoly_result <- GWASpoly(
       data = data.loco,
       models = c("additive"),
-      traits = phenotype_name,
-      params = NULL,
-      n.core = core_num,
-      quiet = F
+      traits = c(phenotype_name),
+      params = params,
+      n.core = core_num
     )
 
     if (qtl_threshold_model == "p_value") {
