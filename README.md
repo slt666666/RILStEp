@@ -15,15 +15,12 @@ epistatic relationships between SNPs for RIL population by comparison of
 
 ## Requirements
 
-Other than CRAN package, `GWASpoly` package is required for RILStEp
-package.<br> please download zip files from
-[here](https://potatobreeding.cals.wisc.edu/software/) <br> and install
-`install.packages("GWASpoly_download/GWASpoly_1.3.tar.gz", repos = NULL,
-type = "source")`<br> or
-`install.packages("GWASpoly_download/GWASpoly_1.3.zip", repos = NULL,
-type = "source")`
-
-R version: 3.6
+Other than CRAN package, [GWASpoly](https://github.com/jendelman/GWASpoly) package is required for RILStEp
+package.<br> please install it.
+``` r
+install.packages("devtools")
+devtools::install_github("jendelman/GWASpoly", build_vignettes=FALSE)
+```
 
 ## Installation
 
