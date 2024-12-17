@@ -17,7 +17,7 @@ extract_peak_qtls <-
            core_num) {
 
     data.loco <- set.K(data_for_gwas, LOCO=TRUE, n.core=2)
-    
+
     params <- set.params()
 
     gwaspoly_result <- GWASpoly(
@@ -312,7 +312,7 @@ load_data <- function (phenotype_path, genotype_path, phenotype_name) {
 #' @importFrom future availableCores plan
 #' @importFrom data.table transpose
 #' @importFrom furrr future_map
-#' @importFrom future multiprocess
+#' @importFrom future multisession
 #' @importFrom utils combn write.csv
 #' @param loaded_data phenotype and genotype dataset from load_data
 #' @param output prefix of output files
@@ -399,7 +399,7 @@ rilstep <-
 
     ### calculate bayes factor
     if (heterozygous) {
-      plan(multiprocess, workers = core_num)
+      plan(multisession, workers = core_num)
       t <- proc.time()
       result <- future_map(
         1:dim(pairs)[2],
@@ -410,7 +410,7 @@ rilstep <-
         pairs = pairs
       )
     } else {
-      plan(multiprocess, workers = core_num)
+      plan(multisession, workers = core_num)
       t <- proc.time()
       result <- future_map(
         1:dim(pairs)[2],
